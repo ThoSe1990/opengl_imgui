@@ -1,0 +1,10 @@
+^C:\GIT\HELLO_IMGUI_GLFW\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/git/hello_imgui_glfw -BC:/git/hello_imgui_glfw/build --check-stamp-file C:/git/hello_imgui_glfw/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

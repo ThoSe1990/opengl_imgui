@@ -1,0 +1,17 @@
+[requires]
+imgui/cci.20220621+1.88.docking
+glfw/3.3.6
+glew/2.2.0
+glad/0.1.36
+glm/0.9.9.8
+
+
+[generators]
+cmake
+
+[imports]
+./res/bindings, imgui_impl_glfw.cpp -> ../bindings
+./res/bindings, imgui_impl_opengl3.cpp -> ../bindings
+./res/bindings, imgui_impl_glfw.h -> ../bindings
+./res/bindings, imgui_impl_opengl3.h -> ../bindings
+./res/bindings, imgui_impl_opengl3_loader.h -> ../bindings

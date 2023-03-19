@@ -1,0 +1,10 @@
+^C:\GIT\HELLO_IMGUI_GLFW\BUILD\CMAKEFILES\A9ECF680B32058DEED85279CBEDB0208\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/git/hello_imgui_glfw -BC:/git/hello_imgui_glfw/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/git/hello_imgui_glfw/build/HelloWorld.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

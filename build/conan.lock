@@ -1,0 +1,80 @@
+{
+ "graph_lock": {
+  "nodes": {
+   "0": {
+    "options": "glad:extensions=''\nglad:gl_profile=compatibility\nglad:gl_version=3.3\nglad:gles1_version=None\nglad:gles2_version=None\nglad:glsc2_version=None\nglad:no_loader=False\nglad:shared=False\nglad:spec=gl\nglew:shared=False\nglfw:shared=False\nglfw:vulkan_static=False\nimgui:shared=False",
+    "requires": [
+     "1",
+     "2",
+     "4",
+     "6",
+     "7"
+    ],
+    "path": "..\\conanfile.txt",
+    "context": "host"
+   },
+   "1": {
+    "ref": "imgui/cci.20220621+1.88.docking#534f2e8aebe73f24a5fe78f87d6d707e",
+    "options": "shared=False",
+    "package_id": "3682397a88110bb423c0b4c7c75a818b7fdf9bd9",
+    "prev": "ee73cfe4fbea867ae163f2c11b9a3e5e",
+    "context": "host"
+   },
+   "2": {
+    "ref": "glfw/3.3.6#2140f498303b7ef95a89e99be0b18c2e",
+    "options": "shared=False\nvulkan_static=False",
+    "package_id": "47b8998e83d8c1659ac36bfa5a5d9cb29c444999",
+    "prev": "79a7e766925fd55c5f4535fb88513da5",
+    "requires": [
+     "3"
+    ],
+    "context": "host"
+   },
+   "3": {
+    "ref": "opengl/system#c1a405e400a8dfc2fd6f57134826a372",
+    "options": "",
+    "package_id": "5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9",
+    "prev": "f1384bfff82e5a9f322cc1534313eb29",
+    "context": "host"
+   },
+   "4": {
+    "ref": "glew/2.2.0#1113ff08038a29c8a70e06b42a426911",
+    "options": "shared=False",
+    "package_id": "002e2fbf2c2bb81994bb012c8f11a8887c1a91b3",
+    "prev": "e50a4135e87e3f5c6a8355a7119382c6",
+    "requires": [
+     "3",
+     "5"
+    ],
+    "context": "host"
+   },
+   "5": {
+    "ref": "glu/system#15132c442c85f2e2cbe02b0b1dcf4438",
+    "options": "",
+    "package_id": "5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9",
+    "prev": "6277ec997675b546dcc81c9dfee49f97",
+    "requires": [
+     "3"
+    ],
+    "context": "host"
+   },
+   "6": {
+    "ref": "glad/0.1.36#458757d022c88f0e2bdd890faa598f95",
+    "options": "extensions=''\ngl_profile=compatibility\ngl_version=3.3\ngles1_version=None\ngles2_version=None\nglsc2_version=None\nno_loader=False\nshared=False\nspec=gl",
+    "package_id": "0fd7ef7be7bd6ff43382d7fc9bc0be83f6d98965",
+    "prev": "519eca06ed9c2dbb702f18710b50db5c",
+    "context": "host"
+   },
+   "7": {
+    "ref": "glm/0.9.9.8#78c4deeb839038888efe2f6ad4dc34f0",
+    "options": "",
+    "package_id": "5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9",
+    "prev": "d6c5d73c0c0c3d10e253dcb8b8d3e4e5",
+    "context": "host"
+   }
+  },
+  "revisions_enabled": true
+ },
+ "version": "0.4",
+ "profile_host": "[settings]\narch=x86_64\narch_build=x86_64\nbuild_type=Debug\ncompiler=Visual Studio\ncompiler.runtime=MTd\ncompiler.version=17\nos=Windows\nos_build=Windows\n[options]\n[build_requires]\n[env]\n"
+}
