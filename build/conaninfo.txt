@@ -7,6 +7,7 @@
     os=Windows
 
 [requires]
+    fmt/8.Y.Z
     glad/0.1.36
     glew/2.Y.Z
     glfw/3.Y.Z
@@ -27,6 +28,7 @@
     os_build=Windows
 
 [full_requires]
+    fmt/8.0.1:63397e69715363b4c819647e6b6cc66a3d70a235
     glad/0.1.36:0fd7ef7be7bd6ff43382d7fc9bc0be83f6d98965
     glew/2.2.0:002e2fbf2c2bb81994bb012c8f11a8887c1a91b3
     glfw/3.3.6:47b8998e83d8c1659ac36bfa5a5d9cb29c444999
@@ -36,6 +38,10 @@
     opengl/system:5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9
 
 [full_options]
+    fmt:header_only=False
+    fmt:shared=False
+    fmt:with_fmt_alias=False
+    fmt:with_os_api=True
     glad:extensions=''
     glad:gl_profile=compatibility
     glad:gl_version=3.3

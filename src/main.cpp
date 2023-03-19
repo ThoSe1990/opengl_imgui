@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+#include <fmt/format.h>
+
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
@@ -218,8 +220,14 @@ int main()
 		sceneBuffer.RescaleFrameBuffer(image_width, image_height);
 		glViewport(0, 0, image_width, image_height);
 
+		
+
 		ImGui::BeginChild("Scrollable Region", ImVec2(image_height, image_width), true, ImGuiWindowFlags_HorizontalScrollbar);
 		
+		if (ImGui::IsWindowHovered()) {
+			std::cout << ImGui::GetMousePos().x -ImGui::GetCursorScreenPos().x << "/" << ImGui::GetMousePos().y -ImGui::GetCursorScreenPos().y << std::endl;
+		}
+
 		float window_width = ImGui::GetContentRegionAvail().x;
 		float window_height = ImGui::GetContentRegionAvail().y;
 
@@ -231,7 +239,7 @@ int main()
 			ImVec2(pos.x + image_width, pos.y + image_height), 
 			ImVec2(0, 1), 
 			ImVec2(1, 0)
-			);
+		);
 
 		ImGui::EndChild();
 		ImGui::End();

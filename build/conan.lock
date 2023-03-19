@@ -2,13 +2,14 @@
  "graph_lock": {
   "nodes": {
    "0": {
-    "options": "glad:extensions=''\nglad:gl_profile=compatibility\nglad:gl_version=3.3\nglad:gles1_version=None\nglad:gles2_version=None\nglad:glsc2_version=None\nglad:no_loader=False\nglad:shared=False\nglad:spec=gl\nglew:shared=False\nglfw:shared=False\nglfw:vulkan_static=False\nimgui:shared=False",
+    "options": "fmt:header_only=False\nfmt:shared=False\nfmt:with_fmt_alias=False\nfmt:with_os_api=True\nglad:extensions=''\nglad:gl_profile=compatibility\nglad:gl_version=3.3\nglad:gles1_version=None\nglad:gles2_version=None\nglad:glsc2_version=None\nglad:no_loader=False\nglad:shared=False\nglad:spec=gl\nglew:shared=False\nglfw:shared=False\nglfw:vulkan_static=False\nimgui:shared=False",
     "requires": [
      "1",
      "2",
      "4",
      "6",
-     "7"
+     "7",
+     "8"
     ],
     "path": "..\\conanfile.txt",
     "context": "host"
@@ -70,6 +71,13 @@
     "options": "",
     "package_id": "5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9",
     "prev": "d6c5d73c0c0c3d10e253dcb8b8d3e4e5",
+    "context": "host"
+   },
+   "8": {
+    "ref": "fmt/8.0.1#83a72a784eab50272df627a2f17a69be",
+    "options": "header_only=False\nshared=False\nwith_fmt_alias=False\nwith_os_api=True",
+    "package_id": "63397e69715363b4c819647e6b6cc66a3d70a235",
+    "prev": "d8c4693cfce7ec25b913c68248e52a85",
     "context": "host"
    }
   },

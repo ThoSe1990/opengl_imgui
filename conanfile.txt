@@ -4,6 +4,7 @@ glfw/3.3.6
 glew/2.2.0
 glad/0.1.36
 glm/0.9.9.8
+fmt/8.0.1
 
 
 [generators]

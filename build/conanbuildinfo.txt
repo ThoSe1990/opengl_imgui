@@ -4,12 +4,14 @@ C:/Users/thoma/.conan/data/glfw/3.3.6/_/_/package/47b8998e83d8c1659ac36bfa5a5d9c
 C:/Users/thoma/.conan/data/glew/2.2.0/_/_/package/002e2fbf2c2bb81994bb012c8f11a8887c1a91b3/include
 C:/Users/thoma/.conan/data/glad/0.1.36/_/_/package/0fd7ef7be7bd6ff43382d7fc9bc0be83f6d98965/include
 C:/Users/thoma/.conan/data/glm/0.9.9.8/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include
+C:/Users/thoma/.conan/data/fmt/8.0.1/_/_/package/63397e69715363b4c819647e6b6cc66a3d70a235/include
 
 [libdirs]
 C:/Users/thoma/.conan/data/imgui/cci.20220621+1.88.docking/_/_/package/3682397a88110bb423c0b4c7c75a818b7fdf9bd9/lib
 C:/Users/thoma/.conan/data/glfw/3.3.6/_/_/package/47b8998e83d8c1659ac36bfa5a5d9cb29c444999/lib
 C:/Users/thoma/.conan/data/glew/2.2.0/_/_/package/002e2fbf2c2bb81994bb012c8f11a8887c1a91b3/lib
 C:/Users/thoma/.conan/data/glad/0.1.36/_/_/package/0fd7ef7be7bd6ff43382d7fc9bc0be83f6d98965/lib
+C:/Users/thoma/.conan/data/fmt/8.0.1/_/_/package/63397e69715363b4c819647e6b6cc66a3d70a235/lib
 
 [bindirs]
 C:/Users/thoma/.conan/data/imgui/cci.20220621+1.88.docking/_/_/package/3682397a88110bb423c0b4c7c75a818b7fdf9bd9/bin
@@ -30,6 +32,7 @@ imgui
 glfw3
 libglew32d
 glad
+fmtd
 
 [system_libs]
 imm32
@@ -390,6 +393,72 @@ glm
 
 
 
+[includedirs_fmt]
+C:/Users/thoma/.conan/data/fmt/8.0.1/_/_/package/63397e69715363b4c819647e6b6cc66a3d70a235/include
+
+[libdirs_fmt]
+C:/Users/thoma/.conan/data/fmt/8.0.1/_/_/package/63397e69715363b4c819647e6b6cc66a3d70a235/lib
+
+[bindirs_fmt]
+
+
+[resdirs_fmt]
+
+
+[builddirs_fmt]
+
+
+[libs_fmt]
+fmtd
+
+[system_libs_fmt]
+
+
+[defines_fmt]
+
+
+[cppflags_fmt]
+
+
+[cxxflags_fmt]
+
+
+[cflags_fmt]
+
+
+[sharedlinkflags_fmt]
+
+
+[exelinkflags_fmt]
+
+
+[sysroot_fmt]
+
+
+[frameworks_fmt]
+
+
+[frameworkdirs_fmt]
+
+
+[rootpath_fmt]
+C:/Users/thoma/.conan/data/fmt/8.0.1/_/_/package/63397e69715363b4c819647e6b6cc66a3d70a235
+
+[name_fmt]
+fmt
+
+[version_fmt]
+8.0.1
+
+[generatornames_fmt]
+cmake_find_package=fmt
+cmake_find_package_multi=fmt
+pkg_config=fmt
+
+[generatorfilenames_fmt]
+
+
+
 [includedirs_glu]
 
 
@@ -519,6 +588,7 @@ cmake_find_package=opengl_system
 cmake_find_package_multi=opengl_system
 
 
+[USER_fmt]
 [USER_glad]
 [USER_glew]
 [USER_glfw]
@@ -532,5 +602,6 @@ PATH=["C:\Users\thoma\.conan\data\imgui\cci.20220621+1.88.docking\_\_\package\36
 [ENV_glew]
 [ENV_glad]
 [ENV_glm]
+[ENV_fmt]
 [ENV_glu]
 [ENV_opengl]
