@@ -30,7 +30,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/bindings/imgui_impl_glfw.cpp 
 ${CMAKE_CURRENT_SOURCE_DIR}/bindings/imgui_impl_opengl3.cpp 
 )
-target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/bindings)
+target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/bindings)
 target_compile_definitions(${target} PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW)
 
 target_link_libraries(${target} ${CONAN_LIBS})
