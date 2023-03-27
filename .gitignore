@@ -1,3 +1,4 @@
-/.vscode
-/build
-./*.ini
+build/
+build*/
+.vscode/
+*.ini

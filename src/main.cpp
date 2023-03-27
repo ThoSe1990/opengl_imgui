@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
 
-#include <fmt/format.h>
-
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
@@ -10,15 +8,18 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#include "framebuffer.hpp"
 
-// Window dimensions
-const GLint WIDTH = 800, HEIGHT = 600;
+const GLint WIDTH = 800;
+const GLint HEIGHT = 600;
 
 GLuint VAO;
 GLuint VBO;
+GLuint FBO;
+GLuint RBO;
+GLuint texture_id;
 GLuint shader;
-static const char* vertex_shader = R"*(
+
+const char* vertex_shader = R"*(
 #version 330
 
 layout (location = 0) in vec3 pos;
@@ -29,7 +30,7 @@ void main()
 }
 )*";
 
-static const char* fragment_shader = R"*(
+const char* fragment_shader = R"*(
 #version 330
 
 out vec4 color;
@@ -89,11 +90,59 @@ void add_shader(GLuint program, const char* shader_code, GLenum type)
 	glAttachShader(program, current_shader);
 }
 
+void create_framebuffer()
+{
+	glGenFramebuffers(1, &FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+	glGenTextures(1, &texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
+
+	glGenRenderbuffers(1, &RBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+}
+
+void bind_framebuffer()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+}
+
+void unbind_framebuffer()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void rescale_framebuffer(float width, float height)
+{
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+}
+
 void compile_shaders()
 {
 	shader = glCreateProgram();
 	if(!shader) {
-		printf("Error creating shader program!\n"); 
+		std::cout << "Error creating shader program!\n"; 
 		exit(1);
 	}
 
@@ -107,7 +156,7 @@ void compile_shaders()
 	glGetProgramiv(shader, GL_LINK_STATUS, &result);
 	if (!result) {
 		glGetProgramInfoLog(shader, sizeof(log), NULL, log);
-		printf("Error linking program! %s\n", log);
+		std::cout << "Error linking program:\n" << log << '\n';
 		return;
 	}
 
@@ -115,7 +164,7 @@ void compile_shaders()
 	glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
 	if (!result) {
 		glGetProgramInfoLog(shader, sizeof(log), NULL, log);
-		printf("Error validating program! %s\n", log);
+		std::cout << "Error validating program:\n" << log << '\n';
 		return;
 	}
 }
@@ -123,57 +172,45 @@ void compile_shaders()
 
 int main()
 {
-	// Initialise GLFW
-	if (!glfwInit())
-	{
-		printf("GLFW initialisation failed!");
+	if (!glfwInit()) {
+		std::cout << "GLFW initialisation failed!\n";
 		glfwTerminate();
 		return 1;
 	}
 
-	// Setup GLFW window properties
-	// OpenGL version
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	// Core Profile = No Backwards Compatibility
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	// Allow Forward Compatbility
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	// Create the window
-	GLFWwindow *mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Test Window", NULL, NULL);
+	GLFWwindow *mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "My Window", NULL, NULL);
 	if (!mainWindow)
 	{
-		printf("GLFW window creation failed!");
+		std::cout << "GLFW creation failed!\n";
 		glfwTerminate();
 		return 1;
 	}
 
-	// Get Buffer Size information
 	int bufferWidth, bufferHeight;
 	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
-
-	// Set context for GLEW to use
 	glfwMakeContextCurrent(mainWindow);
-
-	// Allow modern extension features
 	glewExperimental = GL_TRUE;
 
-	if (glewInit() != GLEW_OK)
-	{
-		printf("GLEW initialisation failed!");
+	if (glewInit() != GLEW_OK) {
+		std::cout << "glew initialisation failed!\n";
 		glfwDestroyWindow(mainWindow);
 		glfwTerminate();
 		return 1;
 	}
 
-	// Setup Viewport size
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
 	create_triangle();
 	compile_shaders();
+	create_framebuffer();
 
-    // Setup Dear ImGui context
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -181,87 +218,58 @@ int main()
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; 
 
-    // // Setup Dear ImGui style
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable){
         style.WindowRounding = 0.0f;
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-
     ImGui_ImplGlfw_InitForOpenGL(mainWindow, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
 
-	FrameBuffer sceneBuffer(WIDTH, HEIGHT);
-
-	// Loop until window closed
 	while (!glfwWindowShouldClose(mainWindow))
 	{
-		// Get + Handle user input events
 		glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();    
         
-		// Clear window
-		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-
         ImGui::NewFrame();
+        ImGui::Begin("My Scene");
 
-        ImGui::Begin("Scene");
+		const float window_width = ImGui::GetContentRegionAvail().x;
+		const float window_height = ImGui::GetContentRegionAvail().y;
 
-		float image_width = 500;
-		float image_height = 500;
-
-		sceneBuffer.RescaleFrameBuffer(image_width, image_height);
-		glViewport(0, 0, image_width, image_height);
-
-		
-
-		ImGui::BeginChild("Scrollable Region", ImVec2(image_height, image_width), true, ImGuiWindowFlags_HorizontalScrollbar);
-		
-		if (ImGui::IsWindowHovered()) {
-			std::cout << ImGui::GetMousePos().x -ImGui::GetCursorScreenPos().x << "/" << ImGui::GetMousePos().y -ImGui::GetCursorScreenPos().y << std::endl;
-		}
-
-		float window_width = ImGui::GetContentRegionAvail().x;
-		float window_height = ImGui::GetContentRegionAvail().y;
+		rescale_framebuffer(window_width, window_height);
+		glViewport(0, 0, window_width, window_height);
 
 		ImVec2 pos = ImGui::GetCursorScreenPos();
 		
 		ImGui::GetWindowDrawList()->AddImage(
-			(void *)sceneBuffer.getFrameTexture(), 
+			(void *)texture_id, 
 			ImVec2(pos.x, pos.y), 
-			ImVec2(pos.x + image_width, pos.y + image_height), 
+			ImVec2(pos.x + window_width, pos.y + window_height), 
 			ImVec2(0, 1), 
 			ImVec2(1, 0)
 		);
 
-		ImGui::EndChild();
 		ImGui::End();
-		
-				
-		sceneBuffer.Bind();
+		ImGui::Render();
 
+
+		bind_framebuffer();
+		
 		glUseProgram(shader);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
 		glUseProgram(0);
-
-		sceneBuffer.Unbind();	
 		
-		
-		
-		
-		
-		ImGui::Render();
-
-
+		unbind_framebuffer();	
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());	
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -274,12 +282,17 @@ int main()
 
 		glfwSwapBuffers(mainWindow);
 	}
-    // Cleanup
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
+	glDeleteFramebuffers(1, &FBO);
+	glDeleteTextures(1, &texture_id);
+	glDeleteRenderbuffers(1, &RBO);
+
     glfwDestroyWindow(mainWindow);
     glfwTerminate();
+
 	return 0;
 }
