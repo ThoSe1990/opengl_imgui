@@ -2,8 +2,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-project(HelloWorld LANGUAGES CXX)
-
+project(OpenGL_ImGUI LANGUAGES CXX)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -22,8 +21,7 @@ endif()
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-
-set(target helloworld)
+set(target example)
 
 add_executable( ${target} 
 ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp 

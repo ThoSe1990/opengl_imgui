@@ -19,7 +19,7 @@ GLuint RBO;
 GLuint texture_id;
 GLuint shader;
 
-const char* vertex_shader = R"*(
+const char* vertex_shader_code = R"*(
 #version 330
 
 layout (location = 0) in vec3 pos;
@@ -30,7 +30,7 @@ void main()
 }
 )*";
 
-const char* fragment_shader = R"*(
+const char* fragment_shader_code = R"*(
 #version 330
 
 out vec4 color;
@@ -83,11 +83,42 @@ void add_shader(GLuint program, const char* shader_code, GLenum type)
 	glGetShaderiv(current_shader, GL_COMPILE_STATUS, &result);
 	if (!result) {
 		glGetShaderInfoLog(current_shader, sizeof(log), NULL, log);
-		printf("Error compiling &d  shader! %s\n", type, log);
+		std::cout << "Error compiling " << type << " shader: " << log << "\n";
 		return;
 	}
 
 	glAttachShader(program, current_shader);
+}
+
+void create_shaders()
+{
+	shader = glCreateProgram();
+	if(!shader) {
+		std::cout << "Error creating shader program!\n"; 
+		exit(1);
+	}
+
+	add_shader(shader, vertex_shader_code, GL_VERTEX_SHADER);
+	add_shader(shader, fragment_shader_code, GL_FRAGMENT_SHADER);
+
+	GLint result = 0;
+	GLchar log[1024] = {0};
+
+	glLinkProgram(shader);
+	glGetProgramiv(shader, GL_LINK_STATUS, &result);
+	if (!result) {
+		glGetProgramInfoLog(shader, sizeof(log), NULL, log);
+		std::cout << "Error linking program:\n" << log << '\n';
+		return;
+	}
+
+	glValidateProgram(shader);
+	glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
+	if (!result) {
+		glGetProgramInfoLog(shader, sizeof(log), NULL, log);
+		std::cout << "Error validating program:\n" << log << '\n';
+		return;
+	}
 }
 
 void create_framebuffer()
@@ -138,36 +169,7 @@ void rescale_framebuffer(float width, float height)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 }
 
-void compile_shaders()
-{
-	shader = glCreateProgram();
-	if(!shader) {
-		std::cout << "Error creating shader program!\n"; 
-		exit(1);
-	}
 
-	add_shader(shader, vertex_shader, GL_VERTEX_SHADER);
-	add_shader(shader, fragment_shader, GL_FRAGMENT_SHADER);
-
-	GLint result = 0;
-	GLchar log[1024] = {0};
-
-	glLinkProgram(shader);
-	glGetProgramiv(shader, GL_LINK_STATUS, &result);
-	if (!result) {
-		glGetProgramInfoLog(shader, sizeof(log), NULL, log);
-		std::cout << "Error linking program:\n" << log << '\n';
-		return;
-	}
-
-	glValidateProgram(shader);
-	glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
-	if (!result) {
-		glGetProgramInfoLog(shader, sizeof(log), NULL, log);
-		std::cout << "Error validating program:\n" << log << '\n';
-		return;
-	}
-}
 
 
 int main()
@@ -207,7 +209,7 @@ int main()
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
 	create_triangle();
-	compile_shaders();
+	create_shaders();
 	create_framebuffer();
 
 
