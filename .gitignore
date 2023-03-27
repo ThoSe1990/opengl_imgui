@@ -1,4 +1,5 @@
 build/
 build*/
+bindings/
 .vscode/
 *.ini
